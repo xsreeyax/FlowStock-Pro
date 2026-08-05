@@ -1,17 +1,17 @@
 package com.flowstockpro.service;
 
-import com.flowstockpro.dto.user.UserRequest;
-import com.flowstockpro.dto.user.UserResponse;
+import com.flowstockpro.dto.UserRequest;
+import com.flowstockpro.dto.UserResponse;
+import com.flowstockpro.entity.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    UserResponse createUser(UserRequest request);
+    User login(String email, String password);
 
-    UserResponse getUserById(Long id);
+    UserResponse register(UserRequest request);
 
     List<UserResponse> getAllUsers();
 
-    void deleteUser(Long id);
 }

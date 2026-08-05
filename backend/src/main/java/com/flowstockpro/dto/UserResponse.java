@@ -1,4 +1,4 @@
-package com.flowstockpro.dto.user;
+package com.flowstockpro.dto;
 
 import com.flowstockpro.entity.Role;
 import lombok.Builder;
