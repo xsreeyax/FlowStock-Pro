@@ -1,27 +1,90 @@
-FlowStock Pro
+# FlowStock Pro
 
-Enterprise Warehouse & Factory Operations Management Platform
+## Enterprise Warehouse, Order & Logistics Management Platform
 
-Tech Stack
-
-- Java 25
-- Spring Boot 3
-- React
-- TypeScript
-- PostgreSQL
-- Docker
-- AWS
+FlowStock Pro is an enterprise-oriented application designed to manage
+warehouse operations, inventory, suppliers, orders, logistics, and
+business analytics through a centralized platform.
 
 > Project currently under development.
-Current Progress
 
-Backend
-- Spring Boot 4
+---
+
+## Tech Stack
+
+### Backend
 - Java 25
+- Spring Boot 4.1.0
 - Maven
-- PostgreSQL
+- Spring Data JPA
 - Hibernate
-- Embedded Tomcat
+- Spring Security
+- PostgreSQL
+- REST APIs
 
-Status
-Backend successfully starts and connects to PostgreSQL.
+### Frontend
+- React
+- Vite
+- JavaScript
+
+### Deployment
+- Docker
+- AWS EC2
+- Amazon S3
+
+---
+
+## Current Progress
+
+### Backend
+
+- User Management
+- Authentication
+- Inventory Management
+- Supplier Management
+- Product Management
+- Stock Movement Management
+- Warehouse Management
+- Purchase Order Management
+- Shipment Management
+- Business Administration
+- Supplier Performance
+- Audit Logs
+- Business Analytics Dashboard
+- Notification Center
+- Global Exception Handling
+
+### Frontend
+
+- React + Vite project initialized
+- Frontend development in progress
+
+### Database
+
+- PostgreSQL
+- Local development database configured
+- JPA/Hibernate entity mapping implemented
+
+---
+
+## Status
+
+Backend core modules have been implemented and tested through REST APIs using Postman.
+
+The React frontend is currently under development.
+
+AWS deployment will be performed after the application is approximately
+90–95% complete.
+
+---
+
+## Planned Deployment
+
+The application is planned to be deployed using:
+
+- Amazon EC2 for application hosting
+- PostgreSQL running in Docker on EC2
+- Amazon S3 for file/document storage
+
+The deployment architecture is intentionally kept simple to minimize
+AWS costs.
