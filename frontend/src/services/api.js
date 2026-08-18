@@ -207,3 +207,55 @@ export async function deleteOrder(id) {
     throw new Error("Failed to delete order");
   }
 }
+
+export async function getWarehouses() {
+  const response = await fetch(`${API_BASE_URL}/warehouses`);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch warehouses");
+  }
+
+  return response.json();
+}
+
+export async function createWarehouse(warehouse) {
+  const response = await fetch(`${API_BASE_URL}/warehouses`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(warehouse),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create warehouse");
+  }
+
+  return response.json();
+}
+
+export async function updateWarehouse(id, warehouse) {
+  const response = await fetch(`${API_BASE_URL}/warehouses/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(warehouse),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update warehouse");
+  }
+
+  return response.json();
+}
+
+export async function deleteWarehouse(id) {
+  const response = await fetch(`${API_BASE_URL}/warehouses/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete warehouse");
+  }
+}
