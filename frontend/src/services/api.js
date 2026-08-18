@@ -155,3 +155,55 @@ export async function deleteSupplier(id) {
     throw new Error("Failed to delete supplier");
   }
 }
+
+export async function getOrders() {
+  const response = await fetch(`${API_BASE_URL}/orders`);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch orders");
+  }
+
+  return response.json();
+}
+
+export async function createOrder(order) {
+  const response = await fetch(`${API_BASE_URL}/orders`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(order),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create order");
+  }
+
+  return response.json();
+}
+
+export async function updateOrder(id, order) {
+  const response = await fetch(`${API_BASE_URL}/orders/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(order),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update order");
+  }
+
+  return response.json();
+}
+
+export async function deleteOrder(id) {
+  const response = await fetch(`${API_BASE_URL}/orders/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete order");
+  }
+}
