@@ -4,12 +4,21 @@ import {
   createInventory,
   updateInventory,
   deleteInventory,
+  getStockMovements,
+  createStockMovement,
+  updateStockMovement,
+  deleteStockMovement,
 } from "../services/api";
 
 function Inventory() {
   const [inventory, setInventory] = useState([]);
+  const [stockMovements, setStockMovements] = useState([]);
+
   const [error, setError] = useState("");
+  const [stockError, setStockError] = useState("");
+
   const [editingId, setEditingId] = useState(null);
+  const [editingMovementId, setEditingMovementId] = useState(null);
 
   const [formData, setFormData] = useState({
     itemCode: "",
@@ -20,6 +29,12 @@ function Inventory() {
     warehouseLocation: "",
   });
 
+  const [movementForm, setMovementForm] = useState({
+    productId: "",
+    quantity: "",
+    movementType: "",
+  });
+
   useEffect(() => {
     getInventory()
       .then((data) => {
@@ -28,6 +43,14 @@ function Inventory() {
       .catch((error) => {
         setError(error.message);
       });
+
+    getStockMovements()
+      .then((data) => {
+        setStockMovements(data);
+      })
+      .catch((error) => {
+        setStockError(error.message);
+      });
   }, []);
 
   const handleChange = (event) => {
@@ -35,6 +58,15 @@ function Inventory() {
 
     setFormData({
       ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleMovementChange = (event) => {
+    const { name, value } = event.target;
+
+    setMovementForm({
+      ...movementForm,
       [name]: value,
     });
   };
@@ -50,6 +82,16 @@ function Inventory() {
     });
 
     setEditingId(null);
+  };
+
+  const resetMovementForm = () => {
+    setMovementForm({
+      productId: "",
+      quantity: "",
+      movementType: "",
+    });
+
+    setEditingMovementId(null);
   };
 
   const handleSubmit = async (event) => {
@@ -88,6 +130,46 @@ function Inventory() {
     }
   };
 
+  const handleMovementSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const movementData = {
+        product: {
+          id: Number(movementForm.productId),
+        },
+        quantity: Number(movementForm.quantity),
+        movementType: movementForm.movementType,
+      };
+
+      if (editingMovementId) {
+        const updatedMovement = await updateStockMovement(
+          editingMovementId,
+          movementData
+        );
+
+        setStockMovements(
+          stockMovements.map((movement) =>
+            movement.id === editingMovementId
+              ? updatedMovement
+              : movement
+          )
+        );
+      } else {
+        const newMovement = await createStockMovement(
+          movementData
+        );
+
+        setStockMovements([...stockMovements, newMovement]);
+      }
+
+      resetMovementForm();
+      setStockError("");
+    } catch (error) {
+      setStockError(error.message);
+    }
+  };
+
   const handleEdit = (item) => {
     setEditingId(item.id);
 
@@ -98,6 +180,16 @@ function Inventory() {
       quantity: item.quantity,
       price: item.price,
       warehouseLocation: item.warehouseLocation,
+    });
+  };
+
+  const handleEditMovement = (movement) => {
+    setEditingMovementId(movement.id);
+
+    setMovementForm({
+      productId: movement.product?.id || "",
+      quantity: movement.quantity,
+      movementType: movement.movementType,
     });
   };
 
@@ -123,6 +215,30 @@ function Inventory() {
     }
   };
 
+  const handleDeleteMovement = async (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this stock movement?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await deleteStockMovement(id);
+
+      setStockMovements(
+        stockMovements.filter(
+          (movement) => movement.id !== id
+        )
+      );
+
+      setStockError("");
+    } catch (error) {
+      setStockError(error.message);
+    }
+  };
+
   return (
     <div>
       <h1>Inventory Management</h1>
@@ -130,7 +246,9 @@ function Inventory() {
       {error && <p>{error}</p>}
 
       <h2>
-        {editingId ? "Edit Inventory Item" : "Add Inventory Item"}
+        {editingId
+          ? "Edit Inventory Item"
+          : "Add Inventory Item"}
       </h2>
 
       <form onSubmit={handleSubmit}>
@@ -229,7 +347,110 @@ function Inventory() {
                     Edit
                   </button>
 
-                  <button onClick={() => handleDelete(item.id)}>
+                  <button
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      <hr />
+
+      <h2>Stock Movements</h2>
+
+      {stockError && <p>{stockError}</p>}
+
+      <h3>
+        {editingMovementId
+          ? "Edit Stock Movement"
+          : "Add Stock Movement"}
+      </h3>
+
+      <form onSubmit={handleMovementSubmit}>
+        <input
+          name="productId"
+          type="number"
+          placeholder="Product ID"
+          value={movementForm.productId}
+          onChange={handleMovementChange}
+          required
+        />
+
+        <input
+          name="quantity"
+          type="number"
+          placeholder="Quantity"
+          value={movementForm.quantity}
+          onChange={handleMovementChange}
+          required
+        />
+
+        <input
+          name="movementType"
+          placeholder="Movement Type (IN / OUT)"
+          value={movementForm.movementType}
+          onChange={handleMovementChange}
+          required
+        />
+
+        <button type="submit">
+          {editingMovementId
+            ? "Update Movement"
+            : "Add Movement"}
+        </button>
+
+        {editingMovementId && (
+          <button
+            type="button"
+            onClick={resetMovementForm}
+          >
+            Cancel
+          </button>
+        )}
+      </form>
+
+      {stockMovements.length === 0 ? (
+        <p>No stock movements found.</p>
+      ) : (
+        <table border="1" cellPadding="10">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Movement Type</th>
+              <th>Movement Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {stockMovements.map((movement) => (
+              <tr key={movement.id}>
+                <td>{movement.id}</td>
+                <td>{movement.product?.productName}</td>
+                <td>{movement.quantity}</td>
+                <td>{movement.movementType}</td>
+                <td>{movement.movementDate}</td>
+                <td>
+                  <button
+                    onClick={() =>
+                      handleEditMovement(movement)
+                    }
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      handleDeleteMovement(movement.id)
+                    }
+                  >
                     Delete
                   </button>
                 </td>

@@ -311,3 +311,55 @@ export async function deleteShipment(id) {
     throw new Error("Failed to delete shipment");
   }
 }
+
+export async function getStockMovements() {
+  const response = await fetch(`${API_BASE_URL}/stock`);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch stock movements");
+  }
+
+  return response.json();
+}
+
+export async function createStockMovement(stockMovement) {
+  const response = await fetch(`${API_BASE_URL}/stock`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(stockMovement),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create stock movement");
+  }
+
+  return response.json();
+}
+
+export async function updateStockMovement(id, stockMovement) {
+  const response = await fetch(`${API_BASE_URL}/stock/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(stockMovement),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update stock movement");
+  }
+
+  return response.json();
+}
+
+export async function deleteStockMovement(id) {
+  const response = await fetch(`${API_BASE_URL}/stock/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete stock movement");
+  }
+}
