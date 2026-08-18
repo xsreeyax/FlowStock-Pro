@@ -259,3 +259,55 @@ export async function deleteWarehouse(id) {
     throw new Error("Failed to delete warehouse");
   }
 }
+
+export async function getShipments() {
+  const response = await fetch(`${API_BASE_URL}/shipments`);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch shipments");
+  }
+
+  return response.json();
+}
+
+export async function createShipment(shipment) {
+  const response = await fetch(`${API_BASE_URL}/shipments`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(shipment),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create shipment");
+  }
+
+  return response.json();
+}
+
+export async function updateShipment(id, shipment) {
+  const response = await fetch(`${API_BASE_URL}/shipments/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(shipment),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update shipment");
+  }
+
+  return response.json();
+}
+
+export async function deleteShipment(id) {
+  const response = await fetch(`${API_BASE_URL}/shipments/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete shipment");
+  }
+}
