@@ -51,3 +51,55 @@ export async function deleteProduct(id) {
     throw new Error("Failed to delete product");
   }
 }
+
+export async function getInventory() {
+  const response = await fetch(`${API_BASE_URL}/inventory`);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch inventory");
+  }
+
+  return response.json();
+}
+
+export async function createInventory(item) {
+  const response = await fetch(`${API_BASE_URL}/inventory`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(item),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create inventory item");
+  }
+
+  return response.json();
+}
+
+export async function updateInventory(id, item) {
+  const response = await fetch(`${API_BASE_URL}/inventory/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(item),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update inventory item");
+  }
+
+  return response.json();
+}
+
+export async function deleteInventory(id) {
+  const response = await fetch(`${API_BASE_URL}/inventory/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete inventory item");
+  }
+}
