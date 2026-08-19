@@ -363,3 +363,65 @@ export async function deleteStockMovement(id) {
     throw new Error("Failed to delete stock movement");
   }
 }
+
+export async function getAnalyticsDashboard() {
+  const response = await fetch(`${API_BASE_URL}/analytics/dashboard`);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch analytics data");
+  }
+
+  return response.json();
+}
+
+export async function getBusinessAdministration() {
+  const response = await fetch(`${API_BASE_URL}/business`);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch business administration data");
+  }
+
+  return response.json();
+}
+
+export async function createBusinessAdministration(data) {
+  const response = await fetch(`${API_BASE_URL}/business`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create business administration record");
+  }
+
+  return response.json();
+}
+
+export async function updateBusinessAdministration(id, data) {
+  const response = await fetch(`${API_BASE_URL}/business/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update business administration record");
+  }
+
+  return response.json();
+}
+
+export async function deleteBusinessAdministration(id) {
+  const response = await fetch(`${API_BASE_URL}/business/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete business administration record");
+  }
+}
