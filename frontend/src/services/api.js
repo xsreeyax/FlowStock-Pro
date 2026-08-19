@@ -425,3 +425,23 @@ export async function deleteBusinessAdministration(id) {
     throw new Error("Failed to delete business administration record");
   }
 }
+
+export async function loginUser(email, password) {
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(message || "Login failed");
+  }
+
+  return response.json();
+}
