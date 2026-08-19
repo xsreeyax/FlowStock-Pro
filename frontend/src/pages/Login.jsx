@@ -34,9 +34,9 @@ function Login() {
       );
 
       localStorage.setItem("userRole", response.role);
-localStorage.setItem("loginMessage", response.message);
+      localStorage.setItem("loginMessage", response.message);
 
-navigate("/dashboard");
+      navigate("/dashboard");
     } catch (error) {
       setError(error.message);
     }
